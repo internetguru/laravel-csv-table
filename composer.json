@@ -1,0 +1,24 @@
+{
+    "name": "internetguru/laravel-csv-table",
+    "description": "A Laravel component to display and manipulate CSV data in tables, with support for custom update functions for cells, and Livewire integration.",
+    "type": "library",
+    "require": {
+        "livewire/livewire": "^3.0",
+        "laravel/framework": "^9.0 || ^10.0 || ^11.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Internetguru\\CsvTable\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "petrzpav",
+            "email": "pavel.petrzela@internetguru.cz"
+        }
+    ],
+    "require-dev": {
+        "laravel/pint": "^1.17"
+    }
+}
