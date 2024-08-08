@@ -2,6 +2,7 @@
 
 namespace Internetguru\CsvTable\Traits;
 
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 
 trait HandleCSV
