@@ -10,19 +10,17 @@ class CsvTable extends Component
 {
     use HandleCSV;
 
+    public $filePath;
+
     public $data;
 
     public $booleanColumns;
 
-    public function mount($csvUrl = null, $csvProviderFunction = null, $booleanColumns = [])
+    public function mount($filePath, $booleanColumns = [])
     {
-        if (is_null($csvUrl) && is_null($csvProviderFunction)) {
-            throw new \Exception('Either csvUrl or csvProviderFunction must be provided');
-        }
+        $this->filePath = $filePath;
         $this->booleanColumns = $booleanColumns;
-        $functionData = explode('@', $csvProviderFunction);
-        $args = explode(',', $functionData[1]);
-        $this->data = $csvProviderFunction ? call_user_func($functionData[0], ...$args) : $this->readCSV($csvUrl);
+        $this->data = $this->readCSV($filePath);
     }
 
     public function downloadCSV()
