@@ -12,6 +12,13 @@
             "Internetguru\\CsvTable\\": "src/"
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Internetguru\\CsvTable\\CsvTableServiceProvider"
+            ]
+        }
+    },
     "authors": [
         {
             "name": "petrzpav",
