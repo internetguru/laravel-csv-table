@@ -7,19 +7,24 @@ use Illuminate\Support\Facades\Http;
 
 trait HandleCSV
 {
-    public function readCSV(string $path, $delimiter = ','): array|bool
+    public static function readCSV(string $path, $delimiter = ','): array|bool
     {
         // Determine if the path is a URL
         if (filter_var($path, FILTER_VALIDATE_URL)) {
-            $content = $this->fetchCSVFromUrl($path);
+            $content = self::fetchCSVFromUrl($path);
         } else {
-            $content = $this->fetchCSVFromFile($path);
+            $content = self::fetchCSVFromFile($path);
         }
 
         if (! $content) {
             return false;
         }
 
+        return self::parseCsv($content, $delimiter);
+    }
+
+    public static function parseCsv(string $content, $delimiter = ','): array
+    {
         $header = null;
         $data = [];
         $lines = explode(PHP_EOL, $content);
@@ -40,7 +45,7 @@ trait HandleCSV
         return $data;
     }
 
-    private function fetchCSVFromFile($filePath)
+    private static function fetchCSVFromFile($filePath)
     {
         if (! file_exists($filePath) || ! is_readable($filePath)) {
             return false;
@@ -49,7 +54,7 @@ trait HandleCSV
         return file_get_contents($filePath);
     }
 
-    private function fetchCSVFromUrl($url)
+    private static function fetchCSVFromUrl($url)
     {
         $response = Http::get($url);
 
@@ -60,9 +65,9 @@ trait HandleCSV
         return $response->body();
     }
 
-    public function generateCSV(array $data, $delimiter = ',')
+    public static function generateCSV(array $data, $delimiter = ','): string
     {
-        $output = fopen('php://temp/maxmemory:' . (5 * 1024 * 1024), 'r+');
+        $output = fopen('php://temp/maxmemory:' . (10 * 1024 * 1024), 'r+');
         fputcsv($output, array_keys($data[0]), $delimiter);
 
         foreach ($data as $row) {
@@ -76,7 +81,7 @@ trait HandleCSV
         return $csvContent;
     }
 
-    public function responseCsv(string $csv, bool $download = true, string $downloadName = 'data.csv'): Response
+    public static function responseCsv(string $csv, bool $download = true, string $downloadName = 'data.csv'): Response
     {
         return $download
             ? response($csv)
