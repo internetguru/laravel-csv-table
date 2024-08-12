@@ -20,6 +20,11 @@ trait HandleCSV
             return false;
         }
 
+        return $this->parseCSV($content, $delimiter);
+    }
+
+    private function parseCSV(string $content, $delimiter = ','): array
+    {
         $header = null;
         $data = [];
         $lines = explode(PHP_EOL, $content);
