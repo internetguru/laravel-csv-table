@@ -1,9 +1,19 @@
 <div>
-    <table>
-        <thead>
+    <table class="table table-striped table-hover">
+        <thead class="table-light">
             <tr>
                 @foreach (array_keys($data[0]) as $header)
-                    <th>{{ $header }}</th>
+                    <th scope="col" wire:click="sort('{{ $header }}')">
+                        {{ $header }}
+                        @if ($sortColumn == $header)
+                            @if ($sortDirection === 'asc')
+                                <i class="fa-solid fa-arrow-up"></i>
+                            @else
+                                <i class="fa-solid fa-arrow-down"></i>
+                            @endif
+                        @else
+                            <i class="fa-solid fa-arrows-up-down"></i>
+                        @endif
                 @endforeach
             </tr>
         </thead>
@@ -27,5 +37,4 @@
             @endforeach
         </tbody>
     </table>
-    <button wire:click="downloadCSV">Download CSV</button>
 </div>

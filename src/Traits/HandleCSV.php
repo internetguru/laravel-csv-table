@@ -2,7 +2,6 @@
 
 namespace Internetguru\CsvTable\Traits;
 
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 
 trait HandleCSV
@@ -81,12 +80,12 @@ trait HandleCSV
         return $csvContent;
     }
 
-    public function responseCsv(string $csv, bool $download = true, string $downloadName = 'data.csv'): Response
+    public function responseCsv(string $csv, bool $download = true, string $downloadName = 'data.csv')
     {
         return $download
-            ? response($csv)
-                ->header('Content-Type', 'text/csv')
-                ->header('Content-Disposition', 'attachment; filename="' . $downloadName . '"')
+            ? response()->streamDownload(function () use ($csv) {
+                echo $csv;
+            }, $downloadName)
             : response($csv)
                 ->header('Content-Type', 'text/plain');
     }
