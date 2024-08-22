@@ -35,6 +35,7 @@
                                         id: '{{ array_values($row)[$idColumn] }}',
                                     })"
                                     name="{{ Str::slug($columnName) }}"
+                                    value="{{ $cell }}"
                                 >{{ $columnName }}</x-ig::input>
                             @else
                                 {{ $cell }}
