@@ -47,10 +47,10 @@ class CsvTable extends Component
     }
 
     #[On('updateColValue')]
-    public function updateColValue($columnName, $row, $value)
+    public function updateColValue($column, $row, $value)
     {
         // Default implementation for updating values
-        $this->data[$row][$columnName] = $value;
+        $this->data[$row][$column] = $value;
     }
 
     public function sort($column)

@@ -28,10 +28,10 @@
                             @if ($editableCol)
                                 <input
                                     type="{{ $editableCol->value }}"
-                                    wire:change="$wire.dispatch('updateColValue', {
-                                        column: '{{ $columnName }}'
+                                    wire:change="dispatch('updateColValue', {
+                                        column: '{{ $columnName }}',
                                         row: {{ $rowIndex }},
-                                        value: $event.target.value
+                                        value: $event.target.value,
                                     })"
                                 >
                             @else
