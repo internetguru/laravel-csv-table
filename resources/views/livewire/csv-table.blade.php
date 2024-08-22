@@ -32,7 +32,6 @@
                                         column: '{{ $columnName }}',
                                         row: {{ $rowIndex }},
                                         value: $event.target.value,
-                                        id: '{{ array_values($row)[$idColumn] }}',
                                     })"
                                     name="{{ Str::slug($columnName) }}"
                                     value="{{ $cell }}"
