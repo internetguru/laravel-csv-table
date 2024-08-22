@@ -26,7 +26,7 @@
                                 $editableCol = $editableColumns[$columnName] ?? $editableColumns[$loop->index] ?? false;
                             @endphp
                             @if ($editableCol)
-                                <input
+                                <x-ig::input
                                     type="{{ $editableCol->value }}"
                                     wire:change="dispatch('updateColValue', {
                                         column: '{{ $columnName }}',
@@ -34,7 +34,7 @@
                                         value: $event.target.value,
                                     })"
                                     value="{{ $cell }}"
-                                >
+                                >{{ $columnName }}</x-ig::input>
                             @else
                                 {{ $cell }}
                             @endif

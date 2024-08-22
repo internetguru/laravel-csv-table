@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "07e94f194e982f69a403352d41844b2e",
+    "content-hash": "6ba4b0b628a46c3c91f0af6aea519531",
     "packages": [
         {
             "name": "brick/math",
@@ -1049,6 +1049,46 @@
                 }
             ],
             "time": "2023-12-03T19:50:20+00:00"
+        },
+        {
+            "name": "internetguru/blade-components",
+            "version": "v0.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/internetguru/blade-components.git",
+                "reference": "3c8a7685f6bb32582d058b2d68583085ffe688fd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/internetguru/blade-components/zipball/3c8a7685f6bb32582d058b2d68583085ffe688fd",
+                "reference": "3c8a7685f6bb32582d058b2d68583085ffe688fd",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Internetguru\\BladeComponents\\PackageServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Internetguru\\BladeComponents\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "petrzpav",
+                    "email": "pavel.petrzela@internetguru.cz"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/internetguru/blade-components/issues",
+                "source": "https://github.com/internetguru/blade-components/tree/v0.4.1"
+            },
+            "time": "2024-08-01T12:27:27+00:00"
         },
         {
             "name": "laravel/framework",
