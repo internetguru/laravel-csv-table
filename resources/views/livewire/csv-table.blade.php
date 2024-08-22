@@ -34,7 +34,7 @@
                                         value: $event.target.value,
                                     })"
                                     value="{{ $cell }}"
-                                    name="{{ slug($columnName) }}"
+                                    name="{{ Str::slug($columnName) }}"
                                 >{{ $columnName }}</x-ig::input>
                             @else
                                 {{ $cell }}
