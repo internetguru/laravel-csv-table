@@ -33,6 +33,7 @@
                                         row: {{ $rowIndex }},
                                         value: $event.target.value,
                                     })"
+                                    value="{{ $cell }}"
                                 >
                             @else
                                 {{ $cell }}
