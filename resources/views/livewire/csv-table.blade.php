@@ -22,11 +22,17 @@
                 <tr>
                     @foreach ($row as $columnName => $cell)
                         <td>
-                            @if (isset($booleanColumns[$columnName]) && $booleanColumns[$columnName])
+                            @php
+                                $editableCol = $editableColumns[$columnName] ?? $editableColumns[$loop->index] ?? false;
+                            @endphp
+                            @if ($editableCol)
                                 <input
-                                    type="checkbox"
-                                    {{ $cell ? 'checked' : '' }}
-                                    wire:change="$emit('updateBooleanValue', {{ $rowIndex }}, '{{ $columnName }}', $event.target.checked, 'updateBooleanValue')"
+                                    type="{{ $editableCol->value }}"
+                                    wire:change="$wire.dispatch('updateColValue', {
+                                        column: '{{ $columnName }}'
+                                        row: {{ $rowIndex }},
+                                        value: $event.target.value
+                                    })"
                                 >
                             @else
                                 {{ $cell }}

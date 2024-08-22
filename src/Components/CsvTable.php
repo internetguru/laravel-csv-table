@@ -18,7 +18,7 @@ class CsvTable extends Component
     public $data;
 
     #[Locked]
-    public $booleanColumns;
+    public $editableColumns;
 
     #[Locked]
     public $sortColumn = null;
@@ -29,12 +29,12 @@ class CsvTable extends Component
     #[Locked]
     public $showRoute;
 
-    public function mount($showRoute = null, $filePath = null, $csvProviderFunction = null, $booleanColumns = [])
+    public function mount($showRoute = null, $filePath = null, $csvProviderFunction = null, $editableColumns = [])
     {
         if (! $filePath && ! $csvProviderFunction) {
             throw new \Exception('Either filePath or csvProviderFunction must be provided.');
         }
-        $this->booleanColumns = $booleanColumns;
+        $this->editableColumns = $editableColumns;
         $this->showRoute = $showRoute;
         if ($csvProviderFunction) {
             $fnParts = explode('@', $csvProviderFunction);
@@ -46,11 +46,11 @@ class CsvTable extends Component
         $this->originalData = $this->data;
     }
 
-    #[On('updateBooleanValue')]
-    public function updateBooleanValue($rowIndex, $columnName, $value)
+    #[On('updateColValue')]
+    public function updateColValue($columnName, $row, $value)
     {
-        // Default implementation for updating boolean values
-        $this->data[$rowIndex][$columnName] = $value;
+        // Default implementation for updating values
+        $this->data[$row][$columnName] = $value;
     }
 
     public function sort($column)

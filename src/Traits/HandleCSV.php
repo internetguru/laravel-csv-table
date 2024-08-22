@@ -22,6 +22,32 @@ trait HandleCSV
         return $this->parseCSV($content, $delimiter);
     }
 
+    public function generateCSV(array $data, $delimiter = ',')
+    {
+        $output = fopen('php://temp/maxmemory:' . (5 * 1024 * 1024), 'r+');
+        fputcsv($output, array_keys($data[0]), $delimiter);
+
+        foreach ($data as $row) {
+            fputcsv($output, $row, $delimiter);
+        }
+
+        rewind($output);
+        $csvContent = stream_get_contents($output);
+        fclose($output);
+
+        return $csvContent;
+    }
+
+    public function responseCsv(string $csv, bool $download = true, string $downloadName = 'data.csv')
+    {
+        return $download
+            ? response()->streamDownload(function () use ($csv) {
+                echo $csv;
+            }, $downloadName)
+            : response($csv)
+                ->header('Content-Type', 'text/plain');
+    }
+
     private function parseCSV(string $content, $delimiter = ','): array
     {
         $header = null;
@@ -62,31 +88,5 @@ trait HandleCSV
         }
 
         return $response->body();
-    }
-
-    public function generateCSV(array $data, $delimiter = ',')
-    {
-        $output = fopen('php://temp/maxmemory:' . (5 * 1024 * 1024), 'r+');
-        fputcsv($output, array_keys($data[0]), $delimiter);
-
-        foreach ($data as $row) {
-            fputcsv($output, $row, $delimiter);
-        }
-
-        rewind($output);
-        $csvContent = stream_get_contents($output);
-        fclose($output);
-
-        return $csvContent;
-    }
-
-    public function responseCsv(string $csv, bool $download = true, string $downloadName = 'data.csv')
-    {
-        return $download
-            ? response()->streamDownload(function () use ($csv) {
-                echo $csv;
-            }, $downloadName)
-            : response($csv)
-                ->header('Content-Type', 'text/plain');
     }
 }
