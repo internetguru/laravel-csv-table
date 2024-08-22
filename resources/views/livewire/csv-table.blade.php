@@ -1,4 +1,4 @@
-<div>
+<div wire:lazy>
     <table class="table table-striped table-hover">
         <thead class="table-light">
             <tr>
@@ -32,8 +32,8 @@
                                         column: '{{ $columnName }}',
                                         row: {{ $rowIndex }},
                                         value: $event.target.value,
+                                        id: '{{ array_values($row)[$idColumn] }}',
                                     })"
-                                    value="{{ $cell }}"
                                     name="{{ Str::slug($columnName) }}"
                                 >{{ $columnName }}</x-ig::input>
                             @else

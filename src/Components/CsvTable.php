@@ -21,6 +21,9 @@ class CsvTable extends Component
     public $editableColumns;
 
     #[Locked]
+    public $idColumn;
+
+    #[Locked]
     public $sortColumn = null;
 
     #[Locked]
@@ -29,12 +32,13 @@ class CsvTable extends Component
     #[Locked]
     public $showRoute;
 
-    public function mount($showRoute = null, $filePath = null, $csvProviderFunction = null, $editableColumns = [])
+    public function mount($showRoute = null, $filePath = null, $csvProviderFunction = null, $editableColumns = [], $idColumn = null)
     {
         if (! $filePath && ! $csvProviderFunction) {
             throw new \Exception('Either filePath or csvProviderFunction must be provided.');
         }
         $this->editableColumns = $editableColumns;
+        $this->idColumn = $idColumn;
         $this->showRoute = $showRoute;
         if ($csvProviderFunction) {
             $fnParts = explode('@', $csvProviderFunction);
@@ -47,7 +51,7 @@ class CsvTable extends Component
     }
 
     #[On('updateColValue')]
-    public function updateColValue($column, $row, $value)
+    public function updateColValue($column, $row, $value, $id)
     {
         // Default implementation for updating values
         $this->data[$row][$column] = $value;
