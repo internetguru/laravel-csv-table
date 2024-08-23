@@ -3,10 +3,7 @@
         <thead class="table-light">
             <tr>
                 @foreach (array_keys($data[0]) as $header)
-                    @php
-                        $hiddenCol = $hiddenColumns[$header] ?? $hiddenColumns[$loop->index] ?? false;
-                    @endphp
-                    @if ($hiddenCol !== false)
+                    @if ($hiddenColumns->contains($header))
                         @continue
                     @endif
                     <th scope="col" wire:click="sort('{{ $header }}')">
@@ -25,21 +22,18 @@
         </thead>
         <tbody>
             @foreach ($data as $rowIndex => $row)
-                <tr>
+                <tr @if ($row[$bgColorColumn] ?? false) style="background-color: {{ $row[$bgColorColumn] }};" @endif>
                     @foreach ($row as $columnName => $cell)
-                        @php
-                            $hiddenCol = $hiddenColumns[$columnName] ?? $hiddenColumns[$loop->index] ?? false;
-                        @endphp
-                        @if ($hiddenCol !== false)
+                        @if ($hiddenColumns->contains($columnName))
                             @continue
                         @endif
                         <td>
                             @php
-                                $editableCol = $editableColumns[$columnName] ?? $editableColumns[$loop->index] ?? false;
+                                $editableColumn = $editableColumns->first(fn($col) => $col['column'] === $columnName);
                             @endphp
-                            @if ($editableCol !== false)
+                            @if ($editableColumn)
                                 <x-ig::input
-                                    type="{{ $editableCol->value }}"
+                                    type="{{ $editableColumn['type']->value }}"
                                     wire:change="dispatch('updateColValue', {
                                         column: '{{ $columnName }}',
                                         row: {{ $rowIndex }},

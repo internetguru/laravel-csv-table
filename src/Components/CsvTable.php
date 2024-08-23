@@ -24,29 +24,38 @@ class CsvTable extends Component
     public $hiddenColumns;
 
     #[Locked]
+    public $bgColorColumn;
+
+    #[Locked]
     public $sortColumn = null;
 
     #[Locked]
     public $sortDirection = 'asc';
 
-    #[Locked]
-    public $showRoute;
-
-    public function mount($showRoute = null, $filePath = null, $csvProviderFunction = null, $editableColumns = [], $hiddenColumns = [])
-    {
-        if (! $filePath && ! $csvProviderFunction) {
-            throw new \Exception('Either filePath or csvProviderFunction must be provided.');
+    public function mount(
+        $csvFilePath = null,
+        $csvProviderFunction = null,
+        $editableColumns = [],
+        $hiddenColumns = [],
+        $bgColorColumn = null
+    ) {
+        if (! $csvFilePath && ! $csvProviderFunction) {
+            throw new \Exception('Either csvFilePath or csvProviderFunction must be provided.');
         }
-        $this->editableColumns = $editableColumns;
-        $this->hiddenColumns = $hiddenColumns;
-        $this->showRoute = $showRoute;
         if ($csvProviderFunction) {
             $fnParts = explode('@', $csvProviderFunction);
             $csvProviderFunction = [app($fnParts[0]), $fnParts[1]];
             $this->data = $this->parseCsv($csvProviderFunction()->getContent());
         } else {
-            $this->data = $filePath ? $this->readCSV($filePath) : [];
+            $this->data = $csvFilePath ? $this->readCSV($csvFilePath) : [];
         }
+        $this->editableColumns = collect(array_map(function ($column) {
+            $column['column'] = $this->normalizeColumnKey($column['column']);
+
+            return $column; // You need to return the modified $column
+        }, $editableColumns));
+        $this->hiddenColumns = collect($this->normalizeColumnKeys($hiddenColumns));
+        $this->bgColorColumn = $this->normalizeColumnKey($bgColorColumn);
         $this->originalData = $this->data;
     }
 
@@ -82,5 +91,30 @@ class CsvTable extends Component
     public function render()
     {
         return view('csv-table::livewire.csv-table');
+    }
+
+    private function normalizeColumnKeys($keys)
+    {
+        return array_map(function ($key) {
+            return $this->normalizeColumnKey($key);
+        }, $keys);
+    }
+
+    /**
+     * Normalize column key to match the key in the data array
+     *
+     * @param  string|int  $key
+     * @return string|null
+     */
+    private function normalizeColumnKey($key)
+    {
+        // try to use the key as is
+        if (isset(current($this->data)[$key])) {
+            return $key;
+        }
+        // try to find the key by index
+        $keys = array_keys(current($this->data));
+
+        return $keys[$key] ?? null;
     }
 }
