@@ -3,6 +3,12 @@
         <thead class="table-light">
             <tr>
                 @foreach (array_keys($data[0]) as $header)
+                    @php
+                        $hiddenCol = $hiddenColumns[$header] ?? $hiddenColumns[$loop->index] ?? false;
+                    @endphp
+                    @if ($hiddenCol !== false)
+                        @continue
+                    @endif
                     <th scope="col" wire:click="sort('{{ $header }}')">
                         {{ $header }}
                         @if ($sortColumn == $header)
@@ -21,11 +27,17 @@
             @foreach ($data as $rowIndex => $row)
                 <tr>
                     @foreach ($row as $columnName => $cell)
+                        @php
+                            $hiddenCol = $hiddenColumns[$columnName] ?? $hiddenColumns[$loop->index] ?? false;
+                        @endphp
+                        @if ($hiddenCol !== false)
+                            @continue
+                        @endif
                         <td>
                             @php
                                 $editableCol = $editableColumns[$columnName] ?? $editableColumns[$loop->index] ?? false;
                             @endphp
-                            @if ($editableCol)
+                            @if ($editableCol !== false)
                                 <x-ig::input
                                     type="{{ $editableCol->value }}"
                                     wire:change="dispatch('updateColValue', {
