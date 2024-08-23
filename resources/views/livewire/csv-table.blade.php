@@ -1,5 +1,5 @@
 <div wire:lazy>
-    <table class="table table-striped table-hover">
+    <table class="table">
         <thead class="table-light">
             <tr>
                 @foreach (array_keys($data[0]) as $header)
@@ -22,7 +22,7 @@
         </thead>
         <tbody>
             @foreach ($data as $rowIndex => $row)
-                <tr @if ($row[$bgColorColumn] ?? false) style="background-color: {{ $row[$bgColorColumn] }};" @endif>
+                <tr @if ($row[$rowClassColumn] ?? false) class="{{ $row[$rowClassColumn] }};" @endif>
                     @foreach ($row as $columnName => $cell)
                         @if ($hiddenColumns->contains($columnName))
                             @continue
@@ -32,16 +32,33 @@
                                 $editableColumn = $editableColumns->first(fn($col) => $col['column'] === $columnName);
                             @endphp
                             @if ($editableColumn)
-                                <x-ig::input
-                                    type="{{ $editableColumn['type']->value }}"
-                                    wire:change="dispatch('updateColValue', {
-                                        column: '{{ $columnName }}',
-                                        row: {{ $rowIndex }},
-                                        value: $event.target.value,
-                                    })"
-                                    name="{{ Str::slug($columnName) }}"
-                                    value="{{ $cell }}"
-                                >{{ $columnName }}</x-ig::input>
+                                @switch($editableColumn['type'])
+                                    @case(\Internetguru\CsvTable\Enums\ColType::SELECT)
+                                        <x-ig::input
+                                            type="select"
+                                            wire:change="dispatch('updateColValue', {
+                                                column: '{{ $columnName }}',
+                                                row: {{ $rowIndex }},
+                                                value: $event.target.value,
+                                            })"
+                                            name="{{ Str::slug($columnName) }}"
+                                            :options="$editableColumn['options']"
+                                            :value="$cell"
+                                        >{{ $columnName }}</x-ig::input>
+                                        @break
+
+                                    @default
+                                        <x-ig::input
+                                            type="{{ $editableColumn['type']->value }}"
+                                            wire:change="dispatch('updateColValue', {
+                                                column: '{{ $columnName }}',
+                                                row: {{ $rowIndex }},
+                                                value: $event.target.value,
+                                            })"
+                                            name="{{ Str::slug($columnName) }}"
+                                            value="{{ $cell }}"
+                                        >{{ $columnName }}</x-ig::input>
+                                @endswitch
                             @else
                                 {{ $cell }}
                             @endif

@@ -24,7 +24,7 @@ class CsvTable extends Component
     public $hiddenColumns;
 
     #[Locked]
-    public $bgColorColumn;
+    public $rowClassColumn;
 
     #[Locked]
     public $sortColumn = null;
@@ -37,7 +37,7 @@ class CsvTable extends Component
         $csvProviderFunction = null,
         $editableColumns = [],
         $hiddenColumns = [],
-        $bgColorColumn = null
+        $rowClassColumn = null
     ) {
         if (! $csvFilePath && ! $csvProviderFunction) {
             throw new \Exception('Either csvFilePath or csvProviderFunction must be provided.');
@@ -55,7 +55,7 @@ class CsvTable extends Component
             return $column; // You need to return the modified $column
         }, $editableColumns));
         $this->hiddenColumns = collect($this->normalizeColumnKeys($hiddenColumns));
-        $this->bgColorColumn = $this->normalizeColumnKey($bgColorColumn);
+        $this->rowClassColumn = $this->normalizeColumnKey($rowClassColumn);
         $this->originalData = $this->data;
     }
 
