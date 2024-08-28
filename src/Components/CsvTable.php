@@ -76,7 +76,9 @@ class CsvTable extends Component
     public function updateColValue($column, $row, $value)
     {
         // Default implementation for updating values
-        $this->data[$row][$column] = $value;
+        $this->originalData[$row][$column] = $value;
+        $this->data = $this->originalData;
+        $this->sort($this->sortColumn);
     }
 
     public function sort($column)
