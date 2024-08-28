@@ -25,8 +25,9 @@
                 @php
                     $stepIndex = ($rowIndex / $lightDarkStep) % 2;
                     $lightDark = $stepIndex < 1 ? 'row--light' : 'row--dark';
+                    $rowClassColumnClass = ($rowClassColumn ?? false) ? $row[$rowClassColumn] : '';
                 @endphp
-                <tr @if ($row[$rowClassColumn] ?? false) class="{{ $row[$rowClassColumn] }} {{ $lightDark }}" @endif>
+                <tr class="{{ $rowClassColumnClass }} {{ $lightDark }}">
                     @foreach ($row as $columnName => $cell)
                         @if ($hiddenColumns->contains($columnName))
                             @continue
