@@ -32,6 +32,12 @@ class CsvTable extends Component
     #[Locked]
     public $sortDirection = 'asc';
 
+    #[Locked]
+    public $dataNumKeyToColKey = [];
+
+    #[Locked]
+    public $dataColKeyToNumKey = [];
+
     public function mount(
         $csvFilePath = null,
         $csvProviderFunction = null,
@@ -54,6 +60,8 @@ class CsvTable extends Component
 
             return $column; // You need to return the modified $column
         }, $editableColumns));
+        $this->dataNumKeyToColKey = array_flip(array_keys(current($this->data)));
+        $this->dataColKeyToNumKey = array_flip($this->dataNumKeyToColKey);
         $this->hiddenColumns = collect($this->normalizeColumnKeys($hiddenColumns));
         $this->rowClassColumn = $this->normalizeColumnKey($rowClassColumn);
         $this->originalData = $this->data;
@@ -113,8 +121,10 @@ class CsvTable extends Component
             return $key;
         }
         // try to find the key by index
-        $keys = array_keys(current($this->data));
+        if (isset($this->dataNumKeyToColKey[$key])) {
+            return $this->dataNumKeyToColKey[$key];
+        }
 
-        return $keys[$key] ?? null;
+        return null;
     }
 }
