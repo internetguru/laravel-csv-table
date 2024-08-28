@@ -121,10 +121,8 @@ class CsvTable extends Component
             return $key;
         }
         // try to find the key by index
-        if (isset($this->dataNumKeyToColKey[$key])) {
-            return $this->dataNumKeyToColKey[$key];
-        }
+        $keys = array_keys(current($this->data));
 
-        return null;
+        return $keys[$key] ?? null;
     }
 }
