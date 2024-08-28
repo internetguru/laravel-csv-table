@@ -27,6 +27,9 @@ class CsvTable extends Component
     public $rowClassColumn;
 
     #[Locked]
+    public $lightDarkStep;
+
+    #[Locked]
     public $sortColumn = null;
 
     #[Locked]
@@ -43,7 +46,8 @@ class CsvTable extends Component
         $csvProviderFunction = null,
         $editableColumns = [],
         $hiddenColumns = [],
-        $rowClassColumn = null
+        $rowClassColumn = null,
+        $lightDarkStep = 1,
     ) {
         if (! $csvFilePath && ! $csvProviderFunction) {
             throw new \Exception('Either csvFilePath or csvProviderFunction must be provided.');
@@ -65,6 +69,7 @@ class CsvTable extends Component
         $this->hiddenColumns = collect($this->normalizeColumnKeys($hiddenColumns));
         $this->rowClassColumn = $this->normalizeColumnKey($rowClassColumn);
         $this->originalData = $this->data;
+        $this->lightDarkStep = $lightDarkStep;
     }
 
     #[On('updateColValue')]

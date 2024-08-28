@@ -22,7 +22,11 @@
         </thead>
         <tbody>
             @foreach ($data as $rowIndex => $row)
-                <tr @if ($row[$rowClassColumn] ?? false) class="{{ $row[$rowClassColumn] }}" @endif>
+                @php
+                    $stepIndex = ($rowIndex / $lightDarkStep) % 2;
+                    $lightDark = $stepIndex < 1 ? 'row--light' : 'row--dark';
+                @endphp
+                <tr @if ($row[$rowClassColumn] ?? false) class="{{ $row[$rowClassColumn] }} {{ $lightDark }}" @endif>
                     @foreach ($row as $columnName => $cell)
                         @if ($hiddenColumns->contains($columnName))
                             @continue
