@@ -101,7 +101,7 @@ class CsvTable extends Component
         return view('csv-table::livewire.csv-table');
     }
 
-    private function normalizeColumnKeys($keys)
+    public function normalizeColumnKeys($keys)
     {
         return array_map(function ($key) {
             return $this->normalizeColumnKey($key);
@@ -114,7 +114,7 @@ class CsvTable extends Component
      * @param  string|int  $key
      * @return string|null
      */
-    private function normalizeColumnKey($key)
+    public function normalizeColumnKey($key)
     {
         // try to use the key as is
         if (isset(current($this->data)[$key])) {
