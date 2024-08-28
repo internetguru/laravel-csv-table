@@ -22,7 +22,7 @@
         </thead>
         <tbody>
             @foreach ($data as $rowIndex => $row)
-                <tr @if ($row[$rowClassColumn] ?? false) class="{{ $row[$rowClassColumn] }};" @endif>
+                <tr @if ($row[$rowClassColumn] ?? false) class="{{ $row[$rowClassColumn] }}" @endif>
                     @foreach ($row as $columnName => $cell)
                         @if ($hiddenColumns->contains($columnName))
                             @continue
