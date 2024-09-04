@@ -45,7 +45,7 @@
                 @foreach ($data as $rowIndex => $row)
                     @php
                         $stepIndex = ($rowIndex / $lightDarkStep) % 2;
-                        $lightDark = $stepIndex < 1 ? 'row--light' : 'row--dark';
+                        $lightDark = $stepIndex < 1 ? '' : 'table-light';
                         $rowClassColumnClass = ($rowClassColumn ?? false) ? $row[$rowClassColumn] : '';
                     @endphp
                     <tr class="{{ $rowClassColumnClass }} {{ $lightDark }}">
