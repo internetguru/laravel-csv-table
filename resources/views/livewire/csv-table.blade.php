@@ -10,7 +10,6 @@
             class="fullscreen btn"
             x-data="{ fullscreen: false }"
             x-on:click.stop="fullscreen = !fullscreen; $dispatch('fullscreen', { fullscreen: fullscreen })"
-            x-on:keyup.escape.window="fullscreen = false; $dispatch('fullscreen', { fullscreen: fullscreen })"
             x-on:fullscreen.window="$el.classList.toggle('active', $event.detail.fullscreen)"
         >
             <span>
