@@ -3,6 +3,7 @@
 namespace Internetguru\CsvTable\Traits;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 trait HandleCSV
 {
@@ -52,9 +53,11 @@ trait HandleCSV
     {
         $header = null;
         $data = [];
-        $lines = str_getcsv($content, "\n");
+        $lines = str_getcsv($content, "\n"); // Split the content into lines
+        $lineNumber = 0;
 
         foreach ($lines as $line) {
+            $lineNumber++;
             if (empty(trim($line))) {
                 continue;
             }
@@ -62,9 +65,23 @@ trait HandleCSV
             $row = str_getcsv($line, $delimiter);
             if (! $header) {
                 $header = $row;
-            } else {
-                $data[] = array_combine($header, $row);
+
+                continue;
             }
+
+            // Check if the number of elements in the row matches the header
+            if (count($row) !== count($header)) {
+                Log::warning("CSV parsing error: Mismatch in column count on line {$lineNumber}. Expected " . count($header) . ' columns, got ' . count($row) . ' columns.');
+
+                // Adjust the row to match the header length
+                if (count($row) > count($header)) {
+                    $row = array_slice($row, 0, count($header));
+                } else {
+                    $row = array_pad($row, count($header), '');
+                }
+            }
+
+            $data[] = array_combine($header, $row);
         }
 
         return $data;
