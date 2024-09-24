@@ -52,7 +52,7 @@ trait HandleCSV
     {
         $header = null;
         $data = [];
-        $lines = explode(PHP_EOL, $content);
+        $lines = str_getcsv($content, "\n");
 
         foreach ($lines as $line) {
             if (empty(trim($line))) {
