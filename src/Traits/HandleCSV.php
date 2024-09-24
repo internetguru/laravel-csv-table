@@ -23,20 +23,35 @@ trait HandleCSV
         return $this->parseCSV($content, $delimiter);
     }
 
-    public function generateCSV(array $data, $delimiter = ',')
+    public function generateCSV(array $data, $delimiter = ',', $enclosure = '"'): string
     {
-        $output = fopen('php://temp/maxmemory:' . (5 * 1024 * 1024), 'r+');
-        fputcsv($output, array_keys($data[0]), $delimiter);
+        $output = fopen('php://temp', 'r+');
 
+        // Write header
+        if (! empty($data)) {
+            fputcsv($output, array_keys(reset($data)), $delimiter, $enclosure);
+        }
+
+        // Write data
         foreach ($data as $row) {
-            fputcsv($output, $row, $delimiter);
+            // Ensure all values are strings and properly escaped
+            $escapedRow = array_map(function ($value) use ($enclosure) {
+                $value = (string) $value;
+                if (strpos($value, $enclosure) !== false) {
+                    $value = str_replace($enclosure, $enclosure . $enclosure, $value);
+                }
+
+                return $value;
+            }, $row);
+
+            fputcsv($output, $escapedRow, $delimiter, $enclosure);
         }
 
         rewind($output);
-        $csvContent = stream_get_contents($output);
+        $csv = stream_get_contents($output);
         fclose($output);
 
-        return $csvContent;
+        return $csv;
     }
 
     public function responseCsv(string $csv, bool $download = true, string $downloadName = 'data.csv')
