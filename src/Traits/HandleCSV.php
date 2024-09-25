@@ -34,17 +34,7 @@ trait HandleCSV
 
         // Write data
         foreach ($data as $row) {
-            // Ensure all values are strings and properly escaped
-            $escapedRow = array_map(function ($value) use ($enclosure) {
-                $value = (string) $value;
-                if (strpos($value, $enclosure) !== false) {
-                    $value = str_replace($enclosure, $enclosure . $enclosure, $value);
-                }
-
-                return $value;
-            }, $row);
-
-            fputcsv($output, $escapedRow, $delimiter, $enclosure);
+            fputcsv($output, $row, $delimiter, $enclosure);
         }
 
         rewind($output);
@@ -68,7 +58,7 @@ trait HandleCSV
     {
         $header = null;
         $data = [];
-        $lines = str_getcsv($content, "\n"); // Split the content into lines
+        $lines = explode("\n", $content);
         $lineNumber = 0;
 
         foreach ($lines as $line) {
